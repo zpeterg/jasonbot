@@ -1,0 +1,152 @@
+<html>
+<head>
+
+<script src="jquery.js"></script>
+
+<script>
+
+var app = {
+	start: function(){
+		console.log('Hey, my name is Json Bot. How are you?');
+		
+		$(document).ready(function(){
+			app.listener();
+		});
+		
+		
+	},
+	
+	
+	
+	
+	listener: function(){
+		$('#in').submit(function(e){
+			e.preventDefault();
+			var this_object = $(this),
+				text = this_object.find('input').val();
+				
+			console.log('You said: ' + text + '.');
+			
+			var array = app.shatter(text),
+				interp = app.interpret(array),
+				answer = app.answer(interp);
+				
+			console.log('Interpretted:', interp);
+			console.log('Answer: ' + answer);
+		});
+	},
+	
+	
+	answer: function(interp){						// takes object like {question: 'who', subject: 'Micah'}
+		var rtn = '',
+			excited = false;
+		
+		if (interp.question === 'who'){							// WHO
+			rtn = 'He is ';
+			
+			if (interp.subject === 'you'){
+				rtn = 'I am Jason Bot';
+				excited = true;
+			}
+			else if (interp.subject === 'i')
+				rtn = 'You are whoever you are';
+			else 
+				rtn = rtn + interp.subject;
+		}
+		else if (interp.question === 'what'){					// WHAT
+			rtn = 'He is ';
+			
+			if (interp.subject === 'you'){
+				rtn = 'I am a ROBOT';
+				excited = true;
+			}
+			else if (interp.subject === 'i')
+				rtn = 'You are a mere human';
+			else 
+				rtn = rtn + 'a mere human';
+		}
+		else if (interp.question === 'where'){					// WHERE
+			rtn = 'He is at ';
+			
+			if (interp.subject === 'you'){
+				rtn = 'I am at mars, in a colony of super robots';
+				excited = true;
+			}
+			else if (interp.subject === 'i')
+				rtn = 'You are in Des Moines, Iowa.';
+			else if (interp.subject === 'micah')
+				rtn = rtn + 'Japan';
+			else if (interp.subject === 'stephen')
+				rtn = rtn + 'Fayetteville, Arkansas';
+			else if (interp.subject === 'putin'){
+				rtn = rtn + 'Russia';
+				excited = true;
+			}
+			else 
+				rtn = rtn + 'an undisclosed, secure location';
+		}
+		
+		
+		return rtn + (excited ? '!!!! :)' : '.');
+	},
+	
+	
+	shatter: function(text){
+		text = text.replace(/[.?,\/#!$%\^&\*;:{}=\-_`~()]/g,"").toLowerCase();
+		
+		var array = text.split(' ');
+		
+		return array;
+	},
+	
+	
+	interpret: function(array){
+		var rtn = {
+			question: '',							// who, what, when, where, why
+			subject: ''								// you, me, Micah, Stephen
+		},
+		def = {
+			question: ['who', 'what', 'when', 'where', 'why'],
+			subject: ['you', 'i', 'me', 'micah', 'stephen', 'putin']
+		},
+		word = '';
+		
+		for(var i=0; i<array.length; i++){				// Loop sentence word-by-word
+			word = array[i];							// who are you
+			
+			if (def.question.indexOf(word) !== -1)
+				rtn.question = word;
+			else if (def.subject.indexOf(word) !== -1)
+				rtn.subject = word;
+		}
+		
+		return rtn;
+	}
+	
+	
+};
+
+app.start();
+
+
+</script>
+
+</head>
+
+
+<body>
+
+Hi, I'm Jason Bot!
+
+<br>
+<br>
+
+<form id="in" action="" >
+	<input type="text" value="" style="width: 300px; font-size: 16px;" />
+	<button type="submit" >Say</button>
+</form>
+
+</body>
+
+
+</html>
